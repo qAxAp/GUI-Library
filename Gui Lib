@@ -1,9 +1,5 @@
 local VLib = {}
 
-local function zigzag(X)
-    return math.acos(math.cos(X * math.pi)) / math.pi
-end
-
 local counter = 0
 
 -- Define a static purple color
@@ -132,7 +128,7 @@ function VLib:Window(text, preset, closebind)
         ScreenGui:Destroy()
     end)
 
-    -- Add the circle for "AxA"
+    -- Change the circle color to purple and text to "AxA"
     local CircleFrame = Instance.new("Frame")
     CircleFrame.Parent = Top
     CircleFrame.BackgroundColor3 = purpleColor
