@@ -1,0 +1,158 @@
+local VLib = {}
+
+local function zigzag(X)
+    return math.acos(math.cos(X * math.pi)) / math.pi
+end
+
+local counter = 0
+
+-- Set a static purple color (you can adjust the RGB values to get the exact shade of purple you want)
+local purpleColor = Color3.fromRGB(128, 0, 128)
+
+local UserInputService = game:GetService('UserInputService')
+local TweenService = game:GetService('TweenService')
+local RunService = game:GetService("RunService")
+local LocalPlayer = game:GetService('Players').LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+local function MakeDraggable(topbarobject, object)
+    local Dragging = false
+    local DragInput, MousePos, FramePos
+
+    topbarobject.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = true
+            MousePos = input.Position
+            FramePos = object.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    Dragging = false
+                end
+            end)
+        end
+    end)
+
+    topbarobject.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            DragInput = input
+        end
+    end)
+
+    RunService.Heartbeat:Connect(function()
+        if Dragging and DragInput then
+            local Delta = Mouse.Position - MousePos
+            object.Position = UDim2.new(FramePos.X.Scale, FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y)
+        end
+    end)
+end
+
+function VLib:Window(text, preset, closebind)
+    local ScreenGui = Instance.new("ScreenGui")
+    local Main = Instance.new("Frame")
+    local Top = Instance.new("Frame")
+    local Title = Instance.new("TextLabel")
+    local CloseBtn = Instance.new("TextButton")
+    local TabButtons = Instance.new("Frame")
+    local UIPadding = Instance.new("UIPadding")
+    local UIListLayout = Instance.new("UIListLayout")
+    local Pages = Instance.new("Frame")
+    local UIPageLayout = Instance.new("UIPageLayout")
+
+    ScreenGui.Name = "ScreenGui"
+    ScreenGui.Parent = game.CoreGui
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    Main.Name = "Main"
+    Main.Parent = ScreenGui
+    Main.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Main.BorderSizePixel = 0
+    Main.Position = UDim2.new(0.5, -248, 0.5, -248)
+    Main.Size = UDim2.new(0, 496, 0, 496)
+
+    Top.Name = "Top"
+    Top.Parent = Main
+    Top.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Top.BorderSizePixel = 0
+    Top.Size = UDim2.new(1, 0, 0, 38)
+
+    Title.Name = "Title"
+    Title.Parent = Top
+    Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Title.BackgroundTransparency = 1.000
+    Title.Size = UDim2.new(1, 0, 1, 0)
+    Title.Font = Enum.Font.SourceSans
+    Title.Text = text
+    Title.TextColor3 = purpleColor
+    Title.TextSize = 14.000
+
+    CloseBtn.Name = "CloseBtn"
+    CloseBtn.Parent = Top
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.BackgroundTransparency = 1.000
+    CloseBtn.Position = UDim2.new(1, -36, 0, 0)
+    CloseBtn.Size = UDim2.new(0, 36, 1, 0)
+    CloseBtn.Font = Enum.Font.SourceSans
+    CloseBtn.Text = "X"
+    CloseBtn.TextColor3 = purpleColor
+    CloseBtn.TextSize = 14.000
+
+    TabButtons.Name = "TabButtons"
+    TabButtons.Parent = Main
+    TabButtons.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TabButtons.BorderSizePixel = 0
+    TabButtons.Position = UDim2.new(0, 0, 0, 38)
+    TabButtons.Size = UDim2.new(0, 100, 1, -38)
+
+    UIPadding.Parent = TabButtons
+    UIPadding.PaddingTop = UDim.new(0, 10)
+
+    UIListLayout.Parent = TabButtons
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 4)
+
+    Pages.Name = "Pages"
+    Pages.Parent = Main
+    Pages.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Pages.BackgroundTransparency = 1.000
+    Pages.Position = UDim2.new(0, 100, 0, 38)
+    Pages.Size = UDim2.new(1, -100, 1, -38)
+
+    UIPageLayout.Parent = Pages
+    UIPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIPageLayout.EasingDirection = Enum.EasingDirection.InOut
+    UIPageLayout.EasingStyle = Enum.EasingStyle.Quad
+    UIPageLayout.FillDirection = Enum.FillDirection.Vertical
+    UIPageLayout.Padding = UDim.new(0, 10)
+    UIPageLayout.TweenTime = 0.400
+
+    -- Set the circle label text to "AxA"
+    local CircleLabel = Instance.new("TextLabel")
+    CircleLabel.Parent = Top
+    CircleLabel.BackgroundColor3 = purpleColor
+    CircleLabel.BackgroundTransparency = 1.000
+    CircleLabel.Size = UDim2.new(0, 50, 0, 50)
+    CircleLabel.Position = UDim2.new(0, -25, 0.5, -25)
+    CircleLabel.Font = Enum.Font.SourceSansBold
+    CircleLabel.Text = "AxA"
+    CircleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CircleLabel.TextSize = 14.000
+    CircleLabel.TextStrokeTransparency = 0.000
+
+    MakeDraggable(Top, Main)
+
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+
+    return {
+        Container = Pages,
+        TweenService = TweenService,
+        UIPageLayout = UIPageLayout,
+        TabButtons = TabButtons,
+        MainFrame = Main,
+        TopFrame = Top,
+    }
+end
+
+return VLib
