@@ -6,7 +6,7 @@ end
 
 local counter = 0
 
--- Set a static purple color (you can adjust the RGB values to get the exact shade of purple you want)
+-- Define a static purple color
 local purpleColor = Color3.fromRGB(128, 0, 128)
 
 local UserInputService = game:GetService('UserInputService')
@@ -83,7 +83,7 @@ function VLib:Window(text, preset, closebind)
     Title.Size = UDim2.new(1, 0, 1, 0)
     Title.Font = Enum.Font.SourceSans
     Title.Text = text
-    Title.TextColor3 = purpleColor
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
     Title.TextSize = 14.000
 
     CloseBtn.Name = "CloseBtn"
@@ -94,7 +94,7 @@ function VLib:Window(text, preset, closebind)
     CloseBtn.Size = UDim2.new(0, 36, 1, 0)
     CloseBtn.Font = Enum.Font.SourceSans
     CloseBtn.Text = "X"
-    CloseBtn.TextColor3 = purpleColor
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     CloseBtn.TextSize = 14.000
 
     TabButtons.Name = "TabButtons"
@@ -126,24 +126,30 @@ function VLib:Window(text, preset, closebind)
     UIPageLayout.Padding = UDim.new(0, 10)
     UIPageLayout.TweenTime = 0.400
 
-    -- Set the circle label text to "AxA"
-    local CircleLabel = Instance.new("TextLabel")
-    CircleLabel.Parent = Top
-    CircleLabel.BackgroundColor3 = purpleColor
-    CircleLabel.BackgroundTransparency = 1.000
-    CircleLabel.Size = UDim2.new(0, 50, 0, 50)
-    CircleLabel.Position = UDim2.new(0, -25, 0.5, -25)
-    CircleLabel.Font = Enum.Font.SourceSansBold
-    CircleLabel.Text = "AxA"
-    CircleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CircleLabel.TextSize = 14.000
-    CircleLabel.TextStrokeTransparency = 0.000
-
     MakeDraggable(Top, Main)
 
     CloseBtn.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
     end)
+
+    -- Add the circle for "AxA"
+    local CircleFrame = Instance.new("Frame")
+    CircleFrame.Parent = Top
+    CircleFrame.BackgroundColor3 = purpleColor
+    CircleFrame.Size = UDim2.new(0, 36, 0, 36)
+    CircleFrame.Position = UDim2.new(0, 10, 0.5, -18)
+    CircleFrame.AnchorPoint = Vector2.new(0, 0.5)
+    CircleFrame.BorderSizePixel = 0
+
+    local CircleLabel = Instance.new("TextLabel")
+    CircleLabel.Parent = CircleFrame
+    CircleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    CircleLabel.BackgroundTransparency = 1.000
+    CircleLabel.Size = UDim2.new(1, 0, 1, 0)
+    CircleLabel.Font = Enum.Font.SourceSansBold
+    CircleLabel.Text = "AxA"
+    CircleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CircleLabel.TextSize = 14.000
 
     return {
         Container = Pages,
